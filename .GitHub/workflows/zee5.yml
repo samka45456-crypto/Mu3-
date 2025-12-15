@@ -3,7 +3,7 @@ name: Update z5e.m3u
 on:
   workflow_dispatch:  # <-- This enables manual triggering
   schedule:
-    - cron: '0 */12 * * *' # Runs every 20 minutes..
+    - cron: '0 */12 * * *' # Runs every 5 minutes..
 
 jobs:
   update-file:
