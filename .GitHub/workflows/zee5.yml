@@ -1,9 +1,9 @@
 name: Update z5e.m3u
 
 on:
-  workflow_dispatch:  # Enables manual triggering
+  workflow_dispatch:  # Allows you to click "Run Workflow" manually
   schedule:
-    - cron: '*/5 * * * *' # Runs every 5 minutes (GitHub's minimum limit)
+    - cron: '*/1 * * * *' # Runs every 5 minutes
 
 jobs:
   update-file:
@@ -11,13 +11,12 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3 # Updated to v3 for better stability
+      uses: actions/checkout@v3
 
-    - name: Fetch file from hosting
-      env:
-        FILE_URL: ${{ secrets.Z5e_FILE_URL }}
+    - name: Fetch file from URL
       run: |
-        curl -o z5e.m3u "$FILE_URL"
+        # Downloading the file from your provided link
+        curl -L -o z5e.m3u "https://raw.githubusercontent.com/alex8875/m3u/refs/heads/main/z5.m3u"
 
     - name: Commit and push changes
       env:
@@ -27,7 +26,13 @@ jobs:
        git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
        git add z5e.m3u
-       git commit -m "Update z5e.m3u file" || exit 0 # Exit gracefully if no changes
+       
+       # Only commit if the file has actually changed
+       if git diff --staged --quiet; then
+         echo "No changes detected. Skipping commit."
+         exit 0
+       fi
 
+       git commit -m "Sync z5e.m3u with source"
        git pull origin main --rebase
        git push origin HEAD:main
