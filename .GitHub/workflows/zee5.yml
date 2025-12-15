@@ -15,9 +15,9 @@ jobs:
 
     - name: Fetch file from hosting
       env:
-        FILE_URL: ${{ secrets.Z5_FILE_URL }}
+        FILE_URL: ${{ secrets.Z5e_FILE_URL }}
       run: |
-        curl -o z5.m3u $FILE_URL
+        curl -o z5e.m3u $FILE_URL
 
     - name: Commit and push changes
       env:
@@ -26,8 +26,8 @@ jobs:
        git config --global user.name "github-actions[bot]"
        git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-       git add z5.m3u
-       git commit -m "Update z5.m3u file." || echo "No changes to commit"
+       git add z5e.m3u
+       git commit -m "Update z5e.m3u file." || echo "No changes to commit"
 
        git pull origin main --rebase
        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
